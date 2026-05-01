@@ -1,6 +1,17 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+
+// Fail fast if JWT_SECRET is not set — prevents silent auth breakage in production
+if (!process.env.JWT_SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("JWT_SECRET environment variable is not set. Add it in your Vercel project settings.");
+  } else {
+    console.warn("⚠️  JWT_SECRET not set — using insecure dev fallback. Set it before deploying.");
+    process.env.JWT_SECRET = "dev-only-insecure-secret";
+  }
+}
+
 import authRoutes from "./routes/auth";
 import contactsRoutes from "./routes/contacts";
 import companiesRoutes from "./routes/companies";
