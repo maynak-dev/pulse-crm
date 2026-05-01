@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, User, Mail, Lock, ArrowRight } from "lucide-react";
+import { Sparkles, User, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { api } from "../lib/api";
 import { useAuth } from "../store/auth";
 
@@ -8,6 +8,7 @@ export default function Register() {
   const nav = useNavigate();
   const setUser = useAuth((s) => s.setUser);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +67,16 @@ export default function Register() {
               <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">Password</span>
               <div className="relative">
                 <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <input className="input pl-9" type="password" placeholder="At least 6 characters" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+                <input className="input pl-9 pr-10" type={showPassword ? "text" : "password"} placeholder="At least 6 characters" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 transition hover:bg-brand-50 hover:text-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
             </label>
 
