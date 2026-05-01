@@ -20,7 +20,15 @@ export default function Login() {
       setUser(data.user);
       nav("/");
     } catch (e: any) {
-      setErr(e.response?.data?.error || "Login failed");
+      const error = e.response?.data?.error;
+      if (typeof error === "object" && error !== null) {
+        // Zod flatten() returns { formErrors: string[], fieldErrors: Record<string, string[]> }
+        const fieldMsgs = Object.values(error.fieldErrors ?? {}).flat().join(", ");
+        const formMsgs = (error.formErrors ?? []).join(", ");
+        setErr(fieldMsgs || formMsgs || "Login failed");
+      } else {
+        setErr(error || "Login failed");
+      }
     } finally { setLoading(false); }
   }
 
