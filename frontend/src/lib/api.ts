@@ -1,11 +1,5 @@
 import axios from "axios";
 
-interface ImportMeta {
-  readonly env: {
-    readonly VITE_API_URL: string;
-  };
-}
-
 export const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000" });
 
 api.interceptors.request.use((config) => {
